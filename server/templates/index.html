@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Honeypot Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="header">
+    <h1>🍯 Honeypot Dashboard</h1>
+</div>
+
+<div class="container">
+
+    <div class="card">
+        <h2>🟢 Active Connections</h2>
+
+        <table id="connections">
+            <thead>
+            <tr>
+                <th>IP</th>
+                <th>Username</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="card">
+
+        <h2>📜 Recent Commands</h2>
+
+        <table id="commands">
+
+            <thead>
+
+            <tr>
+                <th>Time</th>
+                <th>IP</th>
+                <th>User</th>
+                <th>Command</th>
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

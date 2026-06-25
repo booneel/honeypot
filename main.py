@@ -2,6 +2,7 @@ import socket
 from threading import Thread
 from time import sleep
 import uuid
+from server.routes import *
 
 from logger.attack_logger import *
 
@@ -21,6 +22,10 @@ def client_handler(client_sock, client_addr):
 
     print(f"[{client_ip} -> USERNAME: {username}, PASSWORD: {password}]")
     save_login(session_id, client_ip, username, password)
+    active_connection[session_id] = {
+        "ip": client_ip,
+        "username": username
+    }
     fake_shell(client_sock, session_id, username, client_ip, is_root)
 
 def fake_shell(client_sock, session_id, username, ip, has_root):
@@ -35,11 +40,18 @@ def fake_shell(client_sock, session_id, username, ip, has_root):
         if not data:
             break
         save_command(session_id, ip, username, data)
-
         parts = data.split()
 
         command = parts[0]
         args = parts[1:]
+        info = {
+            "time": curr_time(),
+            "session_id": session_id,
+            "ip": ip,
+            "username": username,
+            "command": command,
+        }
+        recent_commands.append(info)
 
         if command == "whoami":
             client_sock.send(f"{prompt_user}\n".encode())
@@ -100,8 +112,20 @@ def fake_shell(client_sock, session_id, username, ip, has_root):
         else:
             client_sock.send(f"{command}: command not found\n".encode())
     disconnect(session_id, ip)
+    del active_connection[session_id]
     client_sock.close()
 
+def run_dashboard():
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=False,
+        use_reloader=False,
+    )
+Thread(
+    target=run_dashboard,
+    daemon=True
+).start()
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind(("0.0.0.0", 7777))
@@ -113,5 +137,6 @@ while True:
 
     Thread(
         target=client_handler,
-        args=(client_socket, client_address)
+        args=(client_socket, client_address),
+        daemon=True,
     ).start()
