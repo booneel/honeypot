@@ -2,62 +2,83 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Honeypot Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Honeypot · Intercept Console</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
-<div class="header">
-    <h1>🍯 Honeypot Dashboard</h1>
-</div>
-
-<div class="container">
-
-    <div class="card">
-        <h2>🟢 Active Connections</h2>
-
-        <table id="connections">
-            <thead>
-            <tr>
-                <th>IP</th>
-                <th>Username</th>
-            </tr>
-            </thead>
-
-            <tbody>
-
-            </tbody>
-        </table>
+<header class="statusbar">
+    <div class="brand">
+        <svg class="brand-mark" viewBox="0 0 28 32" aria-hidden="true">
+            <polygon points="14,1 26.1,8 26.1,24 14,31 1.9,24 1.9,8"
+                     fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <polygon points="14,9 19.2,12 19.2,20 14,23 8.8,20 8.8,12"
+                     fill="currentColor" opacity="0.85"/>
+        </svg>
+        <div class="brand-text">
+            <span class="brand-name">HONEYPOT</span>
+            <span class="brand-sub">Intercept Console</span>
+        </div>
     </div>
 
-
-    <div class="card">
-
-        <h2>📜 Recent Commands</h2>
-
-        <table id="commands">
-
-            <thead>
-
-            <tr>
-                <th>Time</th>
-                <th>IP</th>
-                <th>User</th>
-                <th>Command</th>
-            </tr>
-
-            </thead>
-
-            <tbody>
-
-            </tbody>
-
-        </table>
-
+    <div class="status-right">
+        <span id="clock" class="clock">--:--:--</span>
+        <span id="link-state" class="link-pill is-live">
+            <span class="link-dot"></span>
+            <span class="link-label">LIVE</span>
+        </span>
     </div>
+</header>
 
-</div>
+<main class="console">
+
+    <aside class="rail">
+        <div class="rail-head">
+            <span class="eyebrow">Live sessions</span>
+            <span id="session-count" class="rail-count">0</span>
+        </div>
+        <div id="sessions" class="session-list">
+            <!-- session cards injected here -->
+        </div>
+    </aside>
+
+    <section class="main">
+
+        <div class="metrics">
+            <div class="metric">
+                <span class="metric-label">Active sessions</span>
+                <span id="m-sessions" class="metric-value">0</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Commands in buffer</span>
+                <span id="m-commands" class="metric-value">0</span>
+            </div>
+            <div class="metric metric-threat" id="m-threat-wrap" data-level="calm">
+                <span class="metric-label">Threat level</span>
+                <span id="m-threat" class="metric-value">Calm</span>
+            </div>
+        </div>
+
+        <div class="stream">
+            <div class="stream-head">
+                <span class="eyebrow">Command stream</span>
+                <span class="stream-note">newest first · live buffer</span>
+            </div>
+            <div id="commands" class="cmd-list">
+                <!-- command rows injected here -->
+            </div>
+        </div>
+
+    </section>
+
+</main>
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 

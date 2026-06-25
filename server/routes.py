@@ -1,14 +1,20 @@
-from flask import jsonify, render_template, request
+from flask import jsonify, render_template
 from server.app import app
-from server.state import *
+from server.state import active_connection, recent_commands, state_lock
+
 
 @app.route('/')
 def dashboard():
     return render_template('index.html')
-@app.route('/connection')
-def connection():
-    return jsonify(active_connection)
+
+
+@app.route('/connections')
+def connections():
+    with state_lock:
+        return jsonify(dict(active_connection))
+
 
 @app.route('/recent_commands')
 def recent_command():
-    return jsonify(list(recent_commands))
+    with state_lock:
+        return jsonify(list(recent_commands))

@@ -43,3 +43,9 @@
 {"session_id": "2a008ba1-46a8-4140-8b5e-9f476eba5c20", "ip": "192.168.56.1", "username": "lhlhlh", "command": "pwd", "time": "2026-06-25 12:57:24"}
 {"session_id": "2a008ba1-46a8-4140-8b5e-9f476eba5c20", "ip": "192.168.56.1", "username": "lhlhlh", "command": "id", "time": "2026-06-25 12:57:26"}
 {"session_id": "2a008ba1-46a8-4140-8b5e-9f476eba5c20", "ip": "192.168.56.1", "username": "lhlhlh", "command": "whoami", "time": "2026-06-25 12:57:28"}
+{"session_id": "551ffa07-b3f7-4bee-b913-d5acc852b0aa", "ip": "192.168.56.1", "username": "hello", "command": "ls", "time": "2026-06-25 16:05:04"}
+{"session_id": "551ffa07-b3f7-4bee-b913-d5acc852b0aa", "ip": "192.168.56.1", "username": "hello", "command": "pwd", "time": "2026-06-25 16:05:06"}
+{"session_id": "551ffa07-b3f7-4bee-b913-d5acc852b0aa", "ip": "192.168.56.1", "username": "hello", "command": "su", "time": "2026-06-25 16:05:09"}
+{"session_id": "551ffa07-b3f7-4bee-b913-d5acc852b0aa", "ip": "192.168.56.1", "username": "hello", "command": "exit", "time": "2026-06-25 16:05:16"}
+{"session_id": "551ffa07-b3f7-4bee-b913-d5acc852b0aa", "ip": "192.168.56.1", "username": "hello", "command": "print", "time": "2026-06-25 16:05:20"}
+{"session_id": "551ffa07-b3f7-4bee-b913-d5acc852b0aa", "ip": "192.168.56.1", "username": "hello", "command": "cat flag.txt", "time": "2026-06-25 16:05:23"}
