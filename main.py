@@ -1,148 +1,16 @@
-import socket
 from threading import Thread
 from time import sleep
-import uuid
+from config import DELAY
 
 from server.app import app
-from server.routes import *
-from server.state import active_connection, recent_commands, state_lock
+import server.routes
 
-from logger.attack_logger import *
-
-TARPIT_DELAY = 15
-
-
-def client_handler(client_sock, client_addr):
-    is_root = False
-    session_id = str(uuid.uuid4())
-    client_ip, client_port = client_addr
-
-    print("Successful Connect to Server")
-    print("==========================Client info==========================")
-    print(f"IP: {client_ip}, PORT: {client_port}")
-    print()
-
-    try:
-        client_sock.send(b"username: ")
-        username = client_sock.recv(1024).decode(errors="ignore").strip()
-        client_sock.send(b"password: ")
-        password = client_sock.recv(1024).decode(errors="ignore").strip()
-
-        print(f"[{client_ip} -> USERNAME: {username}, PASSWORD: {password}]")
-        save_login(session_id, client_ip, username, password)
-
-        with state_lock:
-            active_connection[session_id] = {
-                "ip": client_ip,
-                "username": username,
-            }
-
-        fake_shell(client_sock, session_id, username, client_ip, is_root)
-    finally:
-        disconnect(session_id, client_ip)
-        with state_lock:
-            active_connection.pop(session_id, None)
-        client_sock.close()
-
-
-def fake_shell(client_sock, session_id, username, ip, has_root):
-    client_sock.send(b"Login Successful\n")
-
-    while True:
-        prompt_user = "root" if has_root else username
-        prompt_symbol = "#" if has_root else "$"
-
-        client_sock.send(f"{prompt_user}@ubuntu:~{prompt_symbol} ".encode())
-
-        raw = client_sock.recv(1024)
-        if not raw:
-            break
-
-        data = raw.decode(errors="ignore").strip()
-        if not data:
-            continue
-
-        save_command(session_id, ip, username, data)
-        parts = data.split()
-        command = parts[0]
-        args = parts[1:]
-
-        info = {
-            "time": curr_time(),
-            "session_id": session_id,
-            "ip": ip,
-            "username": username,
-            "command": data,
-        }
-        with state_lock:
-            recent_commands.append(info)
-
-        if command == "whoami":
-            client_sock.send(f"{prompt_user}\n".encode())
-        elif command == "pwd":
-            client_sock.send(f"/home/{username}\n".encode())
-        elif command == "ls":
-            client_sock.send(b"flag.txt  test.txt\n")
-        elif command == "uname":
-            if "-a" in args:
-                client_sock.send(b"Linux ubuntu 5.15.0-generic x86_64 GNU/Linux\n")
-            else:
-                client_sock.send(b"Linux\n")
-        elif command == "hostname":
-            client_sock.send(b"ubuntu\n")
-        elif command == "id":
-            if has_root:
-                client_sock.send(b"uid=0(root) gid=0(root)\n")
-            else:
-                client_sock.send(f"uid=1000({username}) gid=1000({username})\n".encode())
-        elif command == "cat":
-            if not args:
-                client_sock.send(b"cat: missing operand\n")
-            elif args[0] == "flag.txt":
-                client_sock.send(b"CTF{fake_flag}\n")
-            elif args[0] == "test.txt":
-                client_sock.send(b"This is test file\n")
-            else:
-                client_sock.send(f"cat: {args[0]}: No such file\n".encode())
-        elif command == "wget":
-            if not args:
-                client_sock.send(b"wget: missing URL\n")
-            else:
-                client_sock.send(f"Connecting to {args[0]}\n".encode())
-                sleep(TARPIT_DELAY)
-                client_sock.send(b"Connection timed out\n")
-        elif data == "ip a":
-            client_sock.send(
-                b"""1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536
-                    inet 127.0.0.1/8 scope host lo
-
-                    2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500
-                        inet 192.168.0.100/24 scope global eth0
-                """)
-        elif command == "curl":
-            if not args:
-                client_sock.send(b"curl: missing URL\n")
-            else:
-                sleep(TARPIT_DELAY)
-                client_sock.send(b"curl: (7) Failed to connect\n")
-        elif command == "su" or command == "sudo":
-            client_sock.send(b"Password: ")
-            client_sock.recv(1024)
-            if command == "sudo":
-                client_sock.send(b"Sorry, try again.\n")
-            else:
-                has_root = True
-        elif command == "exit":
-            if has_root:
-                has_root = False
-            else:
-                client_sock.send(b"logout\n")
-                break
-        else:
-            client_sock.send(f"{command}: command not found\n".encode())
+from server.tcp_server import start_tcp_server
+from server.ssh_server import start_ssh_server
 
 
 def run_dashboard():
+    print("[WEB] Dashboard running on http://127.0.0.1:5000")
     app.run(
         host="127.0.0.1",
         port=5000,
@@ -153,20 +21,11 @@ def run_dashboard():
 
 def main():
     Thread(target=run_dashboard, daemon=True).start()
-
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server_socket.bind(("0.0.0.0", 7777))
-    server_socket.listen()
-    print("Listening.....")
+    Thread(target=start_tcp_server, daemon=True).start()
+    Thread(target=start_ssh_server, daemon=True).start()
 
     while True:
-        client_socket, client_address = server_socket.accept()
-        Thread(
-            target=client_handler,
-            args=(client_socket, client_address),
-            daemon=True,
-        ).start()
+        sleep(DELAY)
 
 
 if __name__ == "__main__":

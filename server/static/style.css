@@ -177,6 +177,14 @@ body {
     background: var(--live);
 }
 
+.session-card.tcp::before{
+    background:#18b26b;
+}
+
+.session-card.ssh::before{
+    background:#3b82f6;
+}
+
 .session-top { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
 
 .session-live {
@@ -190,9 +198,20 @@ body {
 
 .session-tag {
     font-size: 10px;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--faint);
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    color: white;
+}
+
+.session-tag.tcp {
+    background: #18b26b;
+}
+
+.session-tag.ssh {
+    background: #3b82f6;
 }
 
 .session-ip { font-size: 17px; font-weight: 500; letter-spacing: 0.01em; }
@@ -300,6 +319,32 @@ body {
     color: var(--cat, var(--t-other));
     flex: none;
     width: 78px;
+}
+
+.cmd-protocol{
+    width:55px;
+    flex:none;
+
+    text-align:center;
+
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+
+    padding:3px 0;
+
+    border-radius:999px;
+
+    color:white;
+}
+
+.cmd-protocol.tcp{
+    background:#18b26b;
+}
+
+.cmd-protocol.ssh{
+    background:#3b82f6;
 }
 
 .cmd.is-new { animation: arrive 1.1s ease-out; }

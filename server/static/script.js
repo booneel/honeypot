@@ -34,7 +34,7 @@ function categoryOf(command) {
 
 const seen = new Set();
 function signature(cmd) {
-    return [cmd.time, cmd.ip, cmd.username, cmd.command].join("|");
+    return [cmd.time, cmd.protocol, cmd.ip, cmd.username, cmd.command].join("|");
 }
 
 function setLink(online) {
@@ -71,8 +71,8 @@ function renderSessions(data) {
         const dot = document.createElement("span");
         dot.className = "session-live";
         const tag = document.createElement("span");
-        tag.className = "session-tag";
-        tag.textContent = "Connected";
+        tag.className = "session-tag " + (conn.protocol || "TCP").toLowerCase();
+        tag.textContent = conn.protocol || "TCP";
         top.append(dot, tag);
 
         const ip = document.createElement("div");
@@ -81,6 +81,9 @@ function renderSessions(data) {
 
         const meta = document.createElement("div");
         meta.className = "session-meta";
+        const protocol = document.createElement("div");
+        protocol.className = "session-protocol";
+        protocol.textContent = conn.protocol;
         meta.appendChild(document.createTextNode("as "));
         const user = document.createElement("b");
         user.textContent = conn.username ?? "—";
@@ -134,9 +137,9 @@ function renderCommands(data) {
         time.className = "cmd-time";
         time.textContent = (cmd.time || "").split(" ")[1] || cmd.time || "";
 
-        const label = document.createElement("span");
-        label.className = "cmd-cat-label";
-        label.textContent = CAT_LABEL[cat];
+        const proto = document.createElement("span");
+        proto.className = "cmd-protocol " + (cmd.protocol || "TCP").toLowerCase();
+        proto.textContent = cmd.protocol || "TCP";
 
         const text = document.createElement("span");
         text.className = "cmd-text";
@@ -149,7 +152,7 @@ function renderCommands(data) {
         ipEl.textContent = cmd.ip ?? "";
         who.append(ipEl, document.createTextNode(" · " + (cmd.username ?? "")));
 
-        row.append(time, label, text, who);
+        row.append(time, proto, label, text, who);
         list.appendChild(row);
     });
 
