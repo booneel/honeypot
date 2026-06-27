@@ -168,10 +168,10 @@ def fake_shell(client_sock, session_id, username, ip, has_root, protocol):
             shell_print(
                 client_sock,
                 """1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536
-                        inet 127.0.0.1/8 scope host lo
+inet 127.0.0.1/8 scope host lo
 
-                        2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500
-                        inet 192.168.0.100/24 scope global eth0""",
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500
+inet 192.168.0.100/24 scope global eth0""",
                 protocol
             )
 

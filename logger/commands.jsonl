@@ -175,3 +175,21 @@
 {"session_id": "f2a714c2-6f00-4397-8126-7c0f12e19bdb", "ip": "192.168.56.1", "username": "ls", "command": "whoami", "time": "2026-06-27 13:41:47", "protocol": "TCP"}
 {"session_id": "b1894aeb-dddd-4eba-926e-65e5577f6802", "ip": "192.168.56.1", "username": "sklda", "command": "ls", "time": "2026-06-27 14:22:17", "protocol": "TCP"}
 {"session_id": "9ca4ad64-1ec1-433d-8ee2-4d008d457acc", "ip": "192.168.56.1", "username": "ls", "command": "ls", "time": "2026-06-27 14:33:24", "protocol": "TCP"}
+{"session_id": "60b81c74-5299-41e6-b5a3-ded5f59b9af5", "ip": "192.168.56.1", "username": "test", "command": "ls", "time": "2026-06-27 15:27:13", "protocol": "SSH"}
+{"session_id": "12799d38-369c-414b-9a44-86c8c3cacc29", "ip": "192.168.56.1", "username": "hello", "command": "ls", "time": "2026-06-27 15:27:15", "protocol": "TCP"}
+{"session_id": "60b81c74-5299-41e6-b5a3-ded5f59b9af5", "ip": "192.168.56.1", "username": "test", "command": "ip a", "time": "2026-06-27 15:33:24", "protocol": "SSH"}
+{"session_id": "60b81c74-5299-41e6-b5a3-ded5f59b9af5", "ip": "192.168.56.1", "username": "test", "command": "ip a", "time": "2026-06-27 15:33:28", "protocol": "SSH"}
+{"session_id": "12799d38-369c-414b-9a44-86c8c3cacc29", "ip": "192.168.56.1", "username": "hello", "command": "ip a", "time": "2026-06-27 15:33:51", "protocol": "TCP"}
+{"session_id": "fefc5ddf-cb15-490a-a048-c801718f1bb0", "ip": "192.168.56.1", "username": "hello", "command": "ip", "time": "2026-06-27 15:34:25", "protocol": "TCP"}
+{"session_id": "fefc5ddf-cb15-490a-a048-c801718f1bb0", "ip": "192.168.56.1", "username": "hello", "command": "ip a", "time": "2026-06-27 15:34:26", "protocol": "TCP"}
+{"session_id": "fefc5ddf-cb15-490a-a048-c801718f1bb0", "ip": "192.168.56.1", "username": "hello", "command": "exit", "time": "2026-06-27 15:34:38", "protocol": "TCP"}
+{"session_id": "9f7fdad1-82f0-407a-b23e-2d6e267d2615", "ip": "192.168.56.1", "username": "abc123", "command": "ls", "time": "2026-06-27 15:40:12", "protocol": "TCP"}
+{"session_id": "68eb85ca-a0f2-4202-8901-a67dabf8c365", "ip": "192.168.56.1", "username": "test", "command": "ls", "time": "2026-06-27 15:40:15", "protocol": "SSH"}
+{"session_id": "9f7fdad1-82f0-407a-b23e-2d6e267d2615", "ip": "192.168.56.1", "username": "abc123", "command": "cat flag.txt", "time": "2026-06-27 15:40:22", "protocol": "TCP"}
+{"session_id": "68eb85ca-a0f2-4202-8901-a67dabf8c365", "ip": "192.168.56.1", "username": "test", "command": "cat flag.txt", "time": "2026-06-27 15:40:25", "protocol": "SSH"}
+{"session_id": "9f7fdad1-82f0-407a-b23e-2d6e267d2615", "ip": "192.168.56.1", "username": "abc123", "command": "su", "time": "2026-06-27 15:40:30", "protocol": "TCP"}
+{"session_id": "68eb85ca-a0f2-4202-8901-a67dabf8c365", "ip": "192.168.56.1", "username": "test", "command": "su", "time": "2026-06-27 15:40:36", "protocol": "SSH"}
+{"session_id": "9f7fdad1-82f0-407a-b23e-2d6e267d2615", "ip": "192.168.56.1", "username": "abc123", "command": "exit", "time": "2026-06-27 15:40:44", "protocol": "TCP"}
+{"session_id": "9f7fdad1-82f0-407a-b23e-2d6e267d2615", "ip": "192.168.56.1", "username": "abc123", "command": "exit", "time": "2026-06-27 15:40:46", "protocol": "TCP"}
+{"session_id": "68eb85ca-a0f2-4202-8901-a67dabf8c365", "ip": "192.168.56.1", "username": "test", "command": "exit", "time": "2026-06-27 15:40:50", "protocol": "SSH"}
+{"session_id": "68eb85ca-a0f2-4202-8901-a67dabf8c365", "ip": "192.168.56.1", "username": "test", "command": "exit", "time": "2026-06-27 15:40:51", "protocol": "SSH"}

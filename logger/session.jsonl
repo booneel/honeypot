@@ -17,3 +17,7 @@
 {"session_id": "79113a8c-32a5-4fc1-bb4f-1eebc0bd79ee", "ip": "192.168.56.1", "time": "2026-06-27 13:07:26", "protocol": "TCP"}
 {"session_id": "2c8819e5-02d4-4728-9d7a-b44a51deda4e", "ip": "192.168.56.1", "time": "2026-06-27 13:18:59", "protocol": "TCP"}
 {"session_id": "cffdb906-d989-4081-9734-708bc36fa8a8", "ip": "192.168.56.1", "time": "2026-06-27 13:19:59", "protocol": "SSH"}
+{"session_id": "fefc5ddf-cb15-490a-a048-c801718f1bb0", "ip": "192.168.56.1", "time": "2026-06-27 15:34:38", "protocol": "TCP"}
+{"session_id": "cd787380-51fb-49c9-8650-dd048db247f3", "ip": "192.168.0.12", "time": "2026-06-27 15:39:17", "protocol": "SSH"}
+{"session_id": "9f7fdad1-82f0-407a-b23e-2d6e267d2615", "ip": "192.168.56.1", "time": "2026-06-27 15:40:46", "protocol": "TCP"}
+{"session_id": "68eb85ca-a0f2-4202-8901-a67dabf8c365", "ip": "192.168.56.1", "time": "2026-06-27 15:40:51", "protocol": "SSH"}
