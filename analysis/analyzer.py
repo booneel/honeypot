@@ -1,4 +1,5 @@
 from util import *
+from config import CMD_PATH
 
 DISCOVERY = {
     "whoami",
@@ -29,7 +30,7 @@ priv_esc_attempts = []
 file_access_attempts = []
 discovery_commands = []
 
-logs = load_jsonl("../logger/commands.jsonl")
+logs = load_jsonl(CMD_PATH)
 for log in logs:
     data = log['command'].split()
     command, args = data[0], data[1:]

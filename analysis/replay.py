@@ -1,8 +1,9 @@
 from util import *
 import sys
+from config import CRED_PATH, CMD_PATH
 
-credentials = load_jsonl("../logger/credentials.jsonl")
-commands = load_jsonl("../logger/commands.jsonl")
+credentials = load_jsonl(CRED_PATH)
+commands = load_jsonl(CMD_PATH)
 
 print("=== Session Replay ===\n")
 

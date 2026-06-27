@@ -1,5 +1,6 @@
 from collections import Counter
 from util import *
+from config import CMD_PATH, CRED_PATH, SESSION_PATH
 
 ip_addresses = Counter()
 usernames = Counter()
@@ -7,18 +8,18 @@ passwords = Counter()
 commands = Counter()
 session_total = 0
 
-logs = load_jsonl("../logger/credentials.jsonl")
+logs = load_jsonl(CRED_PATH)
 for log in logs:
     username, password = log['username'], log['password']
     usernames[username] += 1
     passwords[password] += 1
 
-logs = load_jsonl("../logger/commands.jsonl")
+logs = load_jsonl(CMD_PATH)
 for log in logs:
     command = log["command"].split()[0]
     commands[command] += 1
 
-logs = load_jsonl("../logger/session.jsonl")
+logs = load_jsonl(SESSION_PATH)
 for log in logs:
     ip = log["ip"]
     ip_addresses[ip] += 1

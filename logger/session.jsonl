@@ -10,3 +10,10 @@
 {"session_id": "ce2d2c87-563d-4091-8d99-b0223a7fb556", "ip": "192.168.0.12", "time": "2026-06-26 13:07:27", "protocol": "SSH"}
 {"session_id": "aa44adef-0697-4cf7-8ddb-b6c7a812254d", "ip": "192.168.0.68", "time": "2026-06-26 13:20:06", "protocol": "SSH"}
 {"session_id": "e7db5fa6-9795-40e4-813e-1b8c6ac04e92", "ip": "192.168.0.12", "time": "2026-06-26 13:21:04", "protocol": "SSH"}
+{"session_id": "d4d8a9a5-8aff-4449-a0b7-c7fa0b27d5cd", "ip": "192.168.56.1", "time": "2026-06-27 12:59:17", "protocol": "TCP"}
+{"session_id": "53fab9ee-2bad-4264-80e9-c3622e1687f5", "ip": "192.168.56.1", "time": "2026-06-27 12:59:39", "protocol": "SSH"}
+{"session_id": "59b1a535-b2bc-4366-9b85-6f4586f20591", "ip": "192.168.56.1", "time": "2026-06-27 13:03:32", "protocol": "TCP"}
+{"session_id": "e0df2e38-e0b9-4cfa-a8d2-292597f76ee0", "ip": "192.168.56.1", "time": "2026-06-27 13:03:40", "protocol": "SSH"}
+{"session_id": "79113a8c-32a5-4fc1-bb4f-1eebc0bd79ee", "ip": "192.168.56.1", "time": "2026-06-27 13:07:26", "protocol": "TCP"}
+{"session_id": "2c8819e5-02d4-4728-9d7a-b44a51deda4e", "ip": "192.168.56.1", "time": "2026-06-27 13:18:59", "protocol": "TCP"}
+{"session_id": "cffdb906-d989-4081-9734-708bc36fa8a8", "ip": "192.168.56.1", "time": "2026-06-27 13:19:59", "protocol": "SSH"}

@@ -1,7 +1,17 @@
-from logger.attack_logger import curr_time, save_command
-from server.state import state_lock, recent_commands
 from time import sleep
+
 from config import DELAY
+from logger.attack_logger import curr_time, save_command
+from server.state import recent_commands, state_lock
+
+
+def shell_print(sock, text, protocol, end=True):
+    if end:
+        newline = "\r\n" if protocol == "SSH" else "\n"
+        sock.send((text + newline).encode())
+    else:
+        sock.send(text.encode())
+
 
 def recv_line(sock):
     buffer = bytearray()
@@ -13,50 +23,54 @@ def recv_line(sock):
             return None
 
         if ch in (b"\r", b"\n"):
+            sock.send(b"\r\n")
             break
 
         if ch in (b"\x08", b"\x7f"):
             if buffer:
                 buffer.pop()
+                sock.send(b"\b \b")
             continue
 
         buffer.extend(ch)
+        sock.send(ch)
 
     return buffer.decode(errors="ignore").strip()
 
+
+def shell_input(sock, protocol):
+    if protocol == "SSH":
+        return recv_line(sock)
+
+    raw = sock.recv(1024)
+
+    if not raw:
+        return None
+
+    return raw.decode(errors="ignore").strip()
+
+
 def fake_shell(client_sock, session_id, username, ip, has_root, protocol):
 
-    if protocol == "SSH":
-        client_sock.send(b"Login Successful\r\n")
-    else:
-        client_sock.send(b"Login Successful\n")
+    shell_print(client_sock, "Login Successful", protocol)
 
     while True:
+
         prompt_user = "root" if has_root else username
         prompt_symbol = "#" if has_root else "$"
 
         prompt = f"{prompt_user}@ubuntu:~{prompt_symbol} "
-        client_sock.send(prompt.encode())
+        shell_print(client_sock, prompt, protocol, end=False)
 
-        if protocol == "SSH":
-            data = recv_line(client_sock)
-            if data is None:
-                break
-        else:
-            raw = client_sock.recv(1024)
+        data = shell_input(client_sock, protocol)
 
-            if not raw:
-                break
-
-            data = raw.decode(errors="ignore").strip()
+        if data is None:
+            break
 
         if not data:
             continue
 
         save_command(session_id, ip, username, data, protocol)
-        parts = data.split()
-        command = parts[0]
-        args = parts[1:]
 
         info = {
             "time": curr_time(),
@@ -66,69 +80,142 @@ def fake_shell(client_sock, session_id, username, ip, has_root, protocol):
             "command": data,
             "protocol": protocol
         }
+
         with state_lock:
             recent_commands.append(info)
 
+        parts = data.split()
+
+        command = parts[0]
+        args = parts[1:]
+
         if command == "whoami":
-            client_sock.send(f"{prompt_user}\n".encode())
+            shell_print(client_sock, prompt_user, protocol)
+
         elif command == "pwd":
-            client_sock.send(f"/home/{username}\n".encode())
+            shell_print(client_sock, f"/home/{username}", protocol)
+
         elif command == "ls":
-            client_sock.send(b"flag.txt  test.txt\n")
+            shell_print(client_sock, "flag.txt  test.txt", protocol)
+
         elif command == "uname":
             if "-a" in args:
-                client_sock.send(b"Linux ubuntu 5.15.0-generic x86_64 GNU/Linux\n")
+                shell_print(
+                    client_sock,
+                    "Linux ubuntu 5.15.0-generic x86_64 GNU/Linux",
+                    protocol
+                )
             else:
-                client_sock.send(b"Linux\n")
+                shell_print(client_sock, "Linux", protocol)
+
         elif command == "hostname":
-            client_sock.send(b"ubuntu\n")
+            shell_print(client_sock, "ubuntu", protocol)
+
         elif command == "id":
             if has_root:
-                client_sock.send(b"uid=0(root) gid=0(root)\n")
+                shell_print(
+                    client_sock,
+                    "uid=0(root) gid=0(root)",
+                    protocol
+                )
             else:
-                client_sock.send(f"uid=1000({username}) gid=1000({username})\n".encode())
-        elif command == "cat":
-            if not args:
-                client_sock.send(b"cat: missing operand\n")
-            elif args[0] == "flag.txt":
-                client_sock.send(b"CTF{fake_flag}\n")
-            elif args[0] == "test.txt":
-                client_sock.send(b"This is test file\n")
-            else:
-                client_sock.send(f"cat: {args[0]}: No such file\n".encode())
-        elif command == "wget":
-            if not args:
-                client_sock.send(b"wget: missing URL\n")
-            else:
-                client_sock.send(f"Connecting to {args[0]}\n".encode())
-                sleep(DELAY)
-                client_sock.send(b"Connection timed out\n")
-        elif data == "ip a":
-            client_sock.send(
-                b"""1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536
-                    inet 127.0.0.1/8 scope host lo
+                shell_print(
+                    client_sock,
+                    f"uid=1000({username}) gid=1000({username})",
+                    protocol
+                )
 
-                    2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500
-                        inet 192.168.0.100/24 scope global eth0
-                """)
+        elif command == "cat":
+
+            if not args:
+                shell_print(client_sock, "cat: missing operand", protocol)
+
+            elif args[0] == "flag.txt":
+                shell_print(client_sock, "CTF{fake_flag}", protocol)
+
+            elif args[0] == "test.txt":
+                shell_print(client_sock, "This is test file", protocol)
+
+            else:
+                shell_print(
+                    client_sock,
+                    f"cat: {args[0]}: No such file",
+                    protocol
+                )
+
+        elif command == "wget":
+
+            if not args:
+                shell_print(client_sock, "wget: missing URL", protocol)
+
+            else:
+                shell_print(
+                    client_sock,
+                    f"Connecting to {args[0]}",
+                    protocol
+                )
+
+                sleep(DELAY)
+
+                shell_print(
+                    client_sock,
+                    "Connection timed out",
+                    protocol
+                )
+
+        elif data == "ip a":
+
+            shell_print(
+                client_sock,
+                """1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536
+                        inet 127.0.0.1/8 scope host lo
+
+                        2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500
+                        inet 192.168.0.100/24 scope global eth0""",
+                protocol
+            )
+
         elif command == "curl":
             if not args:
-                client_sock.send(b"curl: missing URL\n")
+                shell_print(client_sock, "curl: missing URL", protocol)
+
             else:
                 sleep(DELAY)
-                client_sock.send(b"curl: (7) Failed to connect\n")
-        elif command == "su" or command == "sudo":
-            client_sock.send(b"Password: ")
-            client_sock.recv(1024)
+                shell_print(
+                    client_sock,
+                    "curl: (7) Failed to connect",
+                    protocol
+                )
+
+        elif command in ("su", "sudo"):
+            shell_print(client_sock, "Password: ", protocol, end=False)
+            password = shell_input(client_sock, protocol)
+
+            if password is None:
+                break
+
             if command == "sudo":
-                client_sock.send(b"Sorry, try again.\n")
+                shell_print(
+                    client_sock,
+                    "Sorry, try again.",
+                    protocol
+                )
+
             else:
                 has_root = True
+            continue
+
         elif command == "exit":
+
             if has_root:
                 has_root = False
-            else:
-                client_sock.send(b"logout\n")
-                break
+                continue
+            shell_print(client_sock, "logout", protocol)
+            break
+
         else:
-            client_sock.send(f"{command}: command not found\n".encode())
+            shell_print(
+                client_sock,
+                f"{command}: command not found",
+                protocol
+            )

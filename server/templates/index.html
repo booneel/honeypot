@@ -71,6 +71,18 @@
                 <span class="eyebrow">Command stream</span>
                 <span class="stream-note">newest first · live buffer</span>
             </div>
+            <div class="stream-toolbar">
+                <div class="search-box">
+                    <span class="search-scope">SESSION · IP · USER</span>
+
+                    <input
+                        id="replay-search"
+                        class="replay-search mono"
+                        placeholder="Filter buffer · Enter = search full history"
+                    />
+                    <span id="search-hint" class="search-hint"></span>
+                </div>
+            </div>
             <div id="commands" class="cmd-list">
                 <!-- command rows injected here -->
             </div>
@@ -79,6 +91,8 @@
     </section>
 
 </main>
+<div id="replay-backdrop" class="replay-backdrop"></div>
+<aside id="replay" class="replay-panel"></aside>
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 

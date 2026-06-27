@@ -3,8 +3,7 @@ from time import sleep
 from config import DELAY
 
 from server.app import app
-import server.routes
-
+from server import routes
 from server.tcp_server import start_tcp_server
 from server.ssh_server import start_ssh_server
 

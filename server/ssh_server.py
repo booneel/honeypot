@@ -5,8 +5,9 @@ import paramiko
 from logger.attack_logger import save_login, disconnect
 from server.shell import fake_shell
 from server.state import active_connection, state_lock
+from config import KEY_PATH
 
-HOST_KEY = paramiko.RSAKey(filename="server/server.key")
+HOST_KEY = paramiko.RSAKey(filename=KEY_PATH)
 
 class SSHServer(paramiko.ServerInterface):
     def __init__(self):
@@ -42,7 +43,7 @@ class SSHServer(paramiko.ServerInterface):
 def ssh_client_handler(client_socket, client_address):
     transport = None
     session_id = str(uuid.uuid4())
-    client_ip, _ = client_address
+    client_ip, client_port = client_address
 
     try:
         transport = paramiko.Transport(client_socket)
@@ -55,7 +56,11 @@ def ssh_client_handler(client_socket, client_address):
 
         if channel is None:
             return
-
+        print("Successful Connect to Server")
+        print("==========================Client info==========================")
+        print(f"IP: {client_ip}, PORT: {client_port}")
+        print()
+        print(f"[{client_ip} -> USERNAME: {server.username}, PASSWORD: {server.password}]")
         save_login(session_id, client_ip, server.username, server.password, "SSH")
 
         with state_lock:
